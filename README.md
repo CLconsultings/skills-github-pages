@@ -1,54 +1,26 @@
-<header>
+# Executive AI Consulting public website
 
-<!--
-  <<< Author notes: Course header >>>
-  Include a 1280×640 image, course title in sentence case, and a concise description in emphasis.
-  In your repository settings: enable template repository, add your 1280×640 social image, auto delete head branches.
-  Add your open source license, GitHub uses MIT license.
--->
+This repository contains the source for the public Executive AI Consulting / CLConsulting website at **executiveaiconsulting.org**.
 
-# GitHub Pages
+## Repository scope
 
-_Create a site or blog from your GitHub repositories with GitHub Pages._
+The repository contains public website pages, browser-based decision tools, public claims, and deployment-related configuration. It is **not** the system of record for CLConsulting's complete internal AI governance program.
 
-</header>
+## Accountability
 
-<!--
-  <<< Author notes: Step 1 >>>
-  Choose 3-5 steps for your course.
-  The first step is always the hardest, so pick something easy!
-  Link to docs.github.com for further explanations.
-  Encourage users to open new tabs for steps!
--->
+- **Website owner:** Christopher Lewis
+- **Public evidence scope:** website content, browser-based tool behavior, public claims, privacy disclosures, and repository changes
+- **Current public-governance review:** 2026-09-22
+- **Material-change triggers:** new data collection, analytics, third-party integrations, material claim changes, incidents affecting website assumptions, or material legal/standards changes
 
-## Step 1: Enable GitHub Pages
+See [governance.html](governance.html) for the public evidence boundary and [privacy.html](privacy.html) for current website data-handling behavior.
 
-_Welcome to GitHub Pages and Jekyll :tada:!_
+## Evidence boundary
 
-The first step is to enable GitHub Pages on this [repository](https://docs.github.com/en/get-started/quickstart/github-glossary#repository). When you enable GitHub Pages on a repository, GitHub takes the content that's on the main branch and publishes a website based on its contents.
+Public methodology statements do not, by themselves, prove that internal organizational controls are operating. Internal AI inventory, acceptable-use policy, vendor oversight, risk assessments, training evidence, incident records, data-handling controls, and risk acceptance require separate internal evidence.
 
-### :keyboard: Activity: Enable GitHub Pages
+## Current browser-based tools
 
-1. Open a new browser tab, and work on the steps in your second tab while you read the instructions in this tab.
-1. Under your repository name, click **Settings**.
-1. Click **Pages** in the **Code and automation** section.
-1. Ensure "Deploy from a branch" is selected from the **Source** drop-down menu, and then select `main` from the **Branch** drop-down menu.
-1. Click the **Save** button.
-1. Wait about _one minute_ then refresh this page (the one you're following instructions from). [GitHub Actions](https://docs.github.com/en/actions) will automatically update to the next step.
-   > Turning on GitHub Pages creates a deployment of your repository. GitHub Actions may take up to a minute to respond while waiting for the deployment. Future steps will be about 20 seconds; this step is slower.
-   > **Note**: In the **Pages** of **Settings**, the **Visit site** button will appear at the top. Click the button to see your GitHub Pages site.
+The Executive Quick Signal and Decision Preview run in client-side JavaScript in the current source. The repository currently contains no application code that submits those tool responses with `fetch`, XHR, analytics calls, application cookies, or browser local/session storage.
 
-<footer>
-
-<!--
-  <<< Author notes: Footer >>>
-  Add a link to get support, GitHub status page, code of conduct, license link.
--->
-
----
-
-Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/github-pages) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
-
-&copy; 2023 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
-
-</footer>
+Any future change that introduces persistent storage, server-side submission, analytics, authentication, or third-party data processing should trigger privacy and governance review before release.
