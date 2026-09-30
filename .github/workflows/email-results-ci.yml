@@ -42,8 +42,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if grep -R -nE --exclude='.dev.vars.example' --exclude-dir='.git' '(re_[A-Za-z0-9]{20,}|TURNSTILE_SECRET_KEY=[^r][^e][^p][^l][^a][^c][^e])' email-worker; then
+          if grep -R -nE --exclude='.dev.vars.example' --exclude-dir='.git' \
+            '(re_[A-Za-z0-9]{20,}|(CLOUDFLARE_API_TOKEN|RESEND_API_KEY|TURNSTILE_SECRET_KEY|RATE_LIMIT_SALT)=[^[:space:]]+)' \
+            email-worker; then
             echo "Potential committed secret detected."
+            exit 1
+          fi
+          if git ls-files --error-unmatch email-worker/.dev.vars >/dev/null 2>&1; then
+            echo "email-worker/.dev.vars must never be committed."
             exit 1
           fi
       - name: Confirm client feature is fail closed by default
