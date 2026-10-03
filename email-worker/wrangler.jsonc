@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "clc-email-results",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-28",
+  "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGINS": "https://www.executiveaiconsulting.org,https://executiveaiconsulting.org",
+    "ALLOWED_HOSTNAMES": "www.executiveaiconsulting.org,executiveaiconsulting.org",
+    "EMAIL_FROM": "Executive AI Consulting <results@executiveaiconsulting.org>",
+    "EMAIL_REPLY_TO": "contact@executiveaiconsulting.org"
+  },
+  "ratelimits": [
+    {
+      "name": "EMAIL_RATE_LIMITER",
+      "namespace_id": "2701490",
+      "simple": { "limit": 3, "period": 60 }
+    },
+    {
+      "name": "IP_RATE_LIMITER",
+      "namespace_id": "2701491",
+      "simple": { "limit": 10, "period": 60 }
+    }
+  ]
+}

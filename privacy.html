@@ -16,17 +16,21 @@
 <main>
 <section class="hero"><div class="wrap"><div class="eyebrow">Privacy</div><h1>Privacy information</h1><p class="lead">This notice describes what the current public website source code does with information entered into its browser-based tools and how direct contact works.</p></div></section>
 <section class="section"><div class="wrap">
-<p class="note"><strong>Current source-code behavior:</strong> the Executive Quick Signal and Decision Preview calculate results in your browser. The site code does not submit those answers to CLConsulting, store them in browser local/session storage, set application cookies, or send them to an analytics service.</p>
+<p class="note"><strong>Current source-code behavior:</strong> the Executive Quick Signal and Decision Preview calculate results in your browser. The site does not store assessment responses in browser local/session storage or send them to an analytics service. If the optional “Email me my results” feature is enabled and you choose to use it, the information described below is transmitted only for result generation, verification, abuse prevention, and email delivery.</p>
 <h2>Information you enter into browser-based tools</h2>
-<p>The Quick Signal includes optional participant and role/organization fields. In the current implementation, those fields and the assessment responses are used only in the page running in your browser. Refreshing or leaving the page clears the entered information unless your browser independently preserves form state.</p>
+<p>The Quick Signal includes optional participant and role/organization fields. Until you choose the optional result-email feature, those fields and the assessment responses are used only in the page running in your browser. Refreshing or leaving the page clears the entered information unless your browser independently preserves form state.</p>
+<h2>Emailing assessment results</h2>
+<p>If the “Email me my results” feature is enabled and you explicitly request delivery, the site transmits the recipient email address, optional participant name, optional role/organization, date, and the five numeric assessment responses to a server-side delivery function. The server recomputes the result rather than trusting a result supplied by the browser, uses verification and rate-limiting controls to reduce abuse, and sends the result through the configured transactional email provider.</p>
+<p>The email-results service is designed not to intentionally persist assessment submissions, participant details, or recipient email addresses in an application database. Infrastructure and email-delivery providers may process request, security, and delivery metadata needed to operate the service under their own terms and retention practices.</p>
+<p>The result-email feature is optional. If you do not request delivery, your assessment responses are not transmitted through this feature.</p>
 <h2>Email contact</h2>
-<p>Links labeled for contact use your device's email application. If you choose to send an email, the information you include is transmitted through your email provider and the receiving email service rather than through the website's assessment code.</p>
+<p>Links labeled for direct contact use your device's email application. If you choose to send a direct email, the information you include is transmitted through your email provider and the receiving email service rather than through the assessment code.</p>
 <h2>Hosting and network metadata</h2>
 <p>As with most websites, hosting, domain, network, or security providers may process standard request metadata needed to deliver and protect the site, such as IP address, request time, browser information, and requested page. Their handling is governed by their own service terms and privacy practices.</p>
 <h2>Client and project data</h2>
 <p>This public website notice does not authorize sending confidential, regulated, proprietary, or client-sensitive information through the browser-based demonstration tools. Project-specific data handling requirements should be established for the applicable engagement and systems before sensitive information is used with AI services.</p>
 <h2>Changes</h2>
-<p>This notice should be reviewed when the site adds analytics, server-side forms, new integrations, account features, persistent storage, or other functionality that changes how information is processed.</p>
+<p>This notice should be reviewed when the site adds or changes analytics, server-side forms, email delivery, verification services, integrations, account features, persistent storage, or other functionality that changes how information is processed.</p>
 <h2>Contact</h2>
 <p>Questions about this notice can be sent to <a href="mailto:contact@executiveaiconsulting.org">contact@executiveaiconsulting.org</a>.</p>
 </div></section>

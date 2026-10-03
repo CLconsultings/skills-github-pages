@@ -1,0 +1,36 @@
+name: Deploy Email Results Worker
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: email-worker
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - name: Run scoring regression tests
+        run: npm test
+      - name: Deploy Cloudflare Worker
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: "email-worker"
+          command: deploy
+          secrets: |
+            RESEND_API_KEY
+            TURNSTILE_SECRET_KEY
+            RATE_LIMIT_SALT
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          TURNSTILE_SECRET_KEY: ${{ secrets.TURNSTILE_SECRET_KEY }}
+          RATE_LIMIT_SALT: ${{ secrets.RATE_LIMIT_SALT }}

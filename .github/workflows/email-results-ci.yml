@@ -1,0 +1,87 @@
+name: Email Results CI
+
+on:
+  pull_request:
+    paths:
+      - "assessment.html"
+      - "privacy.html"
+      - "email-results-config.js"
+      - "email-worker/**"
+      - ".github/workflows/email-results-ci.yml"
+  push:
+    branches:
+      - feature/email-results
+    paths:
+      - "assessment.html"
+      - "privacy.html"
+      - "email-results-config.js"
+      - "email-worker/**"
+      - ".github/workflows/email-results-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  scoring-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: email-worker
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - run: npm test
+
+  source-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Fail if common live secret patterns are committed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -R -nE --exclude='.dev.vars.example' --exclude-dir='.git' \
+            '(re_[A-Za-z0-9]{20,}|(CLOUDFLARE_API_TOKEN|RESEND_API_KEY|TURNSTILE_SECRET_KEY|RATE_LIMIT_SALT)=[^[:space:]]+)' \
+            email-worker; then
+            echo "Potential committed secret detected."
+            exit 1
+          fi
+          if git ls-files --error-unmatch email-worker/.dev.vars >/dev/null 2>&1; then
+            echo "email-worker/.dev.vars must never be committed."
+            exit 1
+          fi
+      - name: Confirm client feature is fail closed by default
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'enabled: false' email-results-config.js
+          grep -q 'endpoint: ""' email-results-config.js
+          grep -q 'turnstileSiteKey: ""' email-results-config.js
+
+      - name: Enforce activation preconditions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const config = fs.readFileSync('email-results-config.js','utf8');
+          const enabled = /enabled:\s*true/.test(config);
+          if (!enabled) process.exit(0);
+
+          const endpoint = config.match(/endpoint:\s*"([^"]+)"/)?.[1] || "";
+          const siteKey = config.match(/turnstileSiteKey:\s*"([^"]+)"/)?.[1] || "";
+          if (!endpoint || !siteKey) {
+            console.error('Email results cannot be enabled without endpoint and Turnstile site key.');
+            process.exit(1);
+          }
+
+          const endpointOrigin = new URL(endpoint).origin;
+          const headers = fs.readFileSync('_headers','utf8');
+          const csp = headers.split('\n').find(line => line.includes('Content-Security-Policy:')) || '';
+          if (!csp.includes(endpointOrigin) && endpointOrigin !== 'https://www.executiveaiconsulting.org' && endpointOrigin !== 'https://executiveaiconsulting.org') {
+            console.error('Configured email endpoint origin is not permitted by Content-Security-Policy connect-src:', endpointOrigin);
+            process.exit(1);
+          }
+          NODE
