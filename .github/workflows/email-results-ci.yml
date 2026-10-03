@@ -59,3 +59,29 @@ jobs:
           grep -q 'enabled: false' email-results-config.js
           grep -q 'endpoint: ""' email-results-config.js
           grep -q 'turnstileSiteKey: ""' email-results-config.js
+
+      - name: Enforce activation preconditions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const config = fs.readFileSync('email-results-config.js','utf8');
+          const enabled = /enabled:\s*true/.test(config);
+          if (!enabled) process.exit(0);
+
+          const endpoint = config.match(/endpoint:\s*"([^"]+)"/)?.[1] || "";
+          const siteKey = config.match(/turnstileSiteKey:\s*"([^"]+)"/)?.[1] || "";
+          if (!endpoint || !siteKey) {
+            console.error('Email results cannot be enabled without endpoint and Turnstile site key.');
+            process.exit(1);
+          }
+
+          const endpointOrigin = new URL(endpoint).origin;
+          const headers = fs.readFileSync('_headers','utf8');
+          const csp = headers.split('\n').find(line => line.includes('Content-Security-Policy:')) || '';
+          if (!csp.includes(endpointOrigin) && endpointOrigin !== 'https://www.executiveaiconsulting.org' && endpointOrigin !== 'https://executiveaiconsulting.org') {
+            console.error('Configured email endpoint origin is not permitted by Content-Security-Policy connect-src:', endpointOrigin);
+            process.exit(1);
+          }
+          NODE
